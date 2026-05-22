@@ -95,9 +95,11 @@ body {
   border: 2px solid var(--border-color);
   border-radius: 0.75rem;
   background: white;
+  color: var(--text-primary); /* Ensure text is dark */
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
+  font-weight: 500;
 }
 
 .option-btn:hover:not(:disabled) {
@@ -108,13 +110,50 @@ body {
 .option-btn.correct {
   border-color: var(--success-color);
   background-color: #ecfdf5;
-  color: #065f46;
+  color: #065f46; /* Ensure dark green text */
 }
 
 .option-btn.incorrect {
   border-color: var(--error-color);
   background-color: #fef2f2;
-  color: #991b1b;
+  color: #991b1b; /* Ensure dark red text */
+}
+
+.btn-secondary {
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.config-section {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.input-field {
+  width: 60px;
+  padding: 0.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  text-align: center;
+  font-size: 1rem;
 }
 
 .explanation-card {

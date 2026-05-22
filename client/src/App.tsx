@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BookOpen, ArrowRight, RotateCcw, Award, CheckCircle2, XCircle, Volume2 } from 'lucide-react';
+import { BookOpen, ArrowRight, RotateCcw, Award, CheckCircle2, XCircle, Volume2, Home, Settings2 } from 'lucide-react';
 import './App.css';
 
 interface Question {
@@ -25,6 +25,7 @@ const App: React.FC = () => {
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [questionCount, setQuestionCount] = useState(5);
 
   const levels = ['Basic', 'Easy', 'Medium', 'Hard', 'TOEFL', 'TOEIC'];
 
@@ -38,7 +39,7 @@ const App: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/questions`, {
-        params: { level, count: 5 } // Fetching 5 questions for a quick test
+        params: { level, count: questionCount }
       });
       setQuestions(response.data);
       setCurrentIndex(0);
@@ -78,6 +79,13 @@ const App: React.FC = () => {
     setShowResults(false);
   };
 
+  const goHome = () => {
+    setLevel(null);
+    setQuestions([]);
+    setShowResults(false);
+    setCurrentIndex(0);
+  };
+
   if (loading) {
     return (
       <div className="container">
@@ -92,7 +100,24 @@ const App: React.FC = () => {
     return (
       <div className="container">
         <h1 className="title">English Testing Platform</h1>
-        <p className="subtitle">Select your proficiency level to begin the assessment.</p>
+        <p className="subtitle">Select your proficiency level and set number of questions.</p>
+        
+        <div className="config-section">
+          <div className="input-group">
+            <Settings2 size={18} color="#64748b" />
+            <label htmlFor="count" style={{ color: '#64748b', fontSize: '0.9rem' }}>Number of questions:</label>
+            <input 
+              id="count"
+              type="number" 
+              min="1" 
+              max="50" 
+              value={questionCount} 
+              onChange={(e) => setQuestionCount(parseInt(e.target.value) || 5)}
+              className="input-field"
+            />
+          </div>
+        </div>
+
         <div className="grid">
           {levels.map(l => (
             <button key={l} onClick={() => setLevel(l)} className="btn btn-outline">
@@ -122,7 +147,7 @@ const App: React.FC = () => {
               <RotateCcw size={18} /> Try Again
             </button>
             <button onClick={resetTest} className="btn btn-outline">
-              Change Level
+              <Home size={18} /> Main Menu
             </button>
           </div>
         </div>
@@ -137,9 +162,14 @@ const App: React.FC = () => {
   return (
     <div className="container">
       <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', color: '#64748b' }}>
-          <span>Level: <strong>{level}</strong></span>
-          <span>Question {currentIndex + 1} of {questions.length}</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', color: '#64748b' }}>
+          <button onClick={goHome} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
+            <Home size={16} /> Home
+          </button>
+          <div style={{ textAlign: 'right' }}>
+            <div>Level: <strong>{level}</strong></div>
+            <div style={{ fontSize: '0.875rem' }}>Question {currentIndex + 1} of {questions.length}</div>
+          </div>
         </div>
 
         {currentQuestion.type === 'Audio' && (
@@ -149,7 +179,7 @@ const App: React.FC = () => {
           </div>
         )}
 
-        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem' }}>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
           {currentQuestion.content}
         </h3>
 
@@ -172,7 +202,7 @@ const App: React.FC = () => {
                 disabled={isAnswered}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  {option}
+                  <span style={{ color: 'inherit' }}>{option}</span>
                   {isAnswered && option === currentQuestion.correct_answer && <CheckCircle2 size={18} color="#10b981" />}
                   {isAnswered && option === selectedOption && option !== currentQuestion.correct_answer && <XCircle size={18} color="#ef4444" />}
                 </div>
@@ -183,7 +213,7 @@ const App: React.FC = () => {
 
         {isAnswered && (
           <div className="explanation-card">
-            <h4 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h4 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-color)' }}>
               Explanation
             </h4>
             <p style={{ margin: 0, color: '#475569' }}>{currentQuestion.explanation}</p>
