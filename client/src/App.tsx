@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BookOpen, Headphones, ArrowRight, RotateCcw, Award, CheckCircle2, XCircle, Volume2 } from 'lucide-react';
+import { BookOpen, ArrowRight, RotateCcw, Award, CheckCircle2, XCircle, Volume2 } from 'lucide-react';
 import './App.css';
 
 interface Question {
